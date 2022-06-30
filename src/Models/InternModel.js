@@ -10,14 +10,17 @@ const internSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: "email is a required field",
       unique: true,
-      lowercase: true,
+      lowercase:true,
+      required: 'Email address is required',
+      
     },
     mobile: {
       type: Number,
       required: "mobile is a required field",
       unique: true,
+      
+      
     },
     collegeId: {
       type: ObjectId,
