@@ -13,7 +13,7 @@ const isValid =  function(value){
     }
 
 const createCollege = async function(req,res){
-    try {
+    try{
         let data = req.body
         console.log(typeof data.name)
         // let a = typeof data
