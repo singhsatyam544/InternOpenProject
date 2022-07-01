@@ -11,6 +11,7 @@ const isValid = function(value){
 const  createInter = async function(req, res){
     try {
         let data = req.body
+        console.log(data.name)   // null = object type..
         if(!Object.keys(data).length){
             return res.status(400).send({status:false, msg:"Please enter the Intern Details"})
         }

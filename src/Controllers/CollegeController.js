@@ -8,7 +8,8 @@ const InternModel = require('../Models/InternModel')
 const isValid =  function(value){
     if(typeof value==='undefined' || typeof value === null) return  false
     if(typeof value === 'string' && value.trim().length===0) return false   
-    if(typeof value === 'number') return false 
+    if(typeof value === 'number' || typeof value === 'boolean') return false 
+    
     else return true 
     }
 
@@ -39,7 +40,7 @@ const createCollege = async function(req,res){
             return res.status(400).send({status:false, msg:"This url is not valid"})
         }
         let createdCollege = await CollegeModel.create(data)
-        res.status(201).send({status:false, msg:"Congratulation : College created successfully" ,  data:createdCollege})
+        res.status(201).send({status:true, msg:"Congratulation : College created successfully" ,  data:createdCollege})
     } catch (err) {
         res.status(500).send({status:false, error:err.message})
     }
@@ -59,12 +60,12 @@ const getCollegeDetails = async function(req,res){
         let checkCollegeName = await CollegeModel.findOne({name:lowerCollegeName, isDeleted:false})
         console.log(checkCollegeName)
         if(!checkCollegeName){
-            return res.status(400).send({status:false, msg:"No such college name found "})
+            return res.status(404).send({status:false, msg:"No such college name found "})
         }
         let collegeId = checkCollegeName._id
         let getAllInternData = await InternModel.find({collegeId:collegeId, isDeleted:false}).select({name:1,email:1,mobile:1})
         if(!getAllInternData){
-            return res.status(400).send({status:false, msg:"No intern is apply for this porgram"})
+            return res.status(404).send({status:false, msg:"No intern is apply for this porgram"})
         }
         /*Assign Value*/
         let name = checkCollegeName.name
@@ -75,13 +76,15 @@ const getCollegeDetails = async function(req,res){
             name:name,
             fullName:fullName,
             logoLink:logoLink,
-            interests:getAllInternData
+            interns:getAllInternData
         }
         res.status(200).send({status:true, msg:"Suceesfull", data:collegeData})
     } catch (err) {
         return res.status(500).send({status:false, error:err.message})
     }
 }
+
+
 
 module.exports.createCollege = createCollege
 module.exports.getCollegeDetails = getCollegeDetails
